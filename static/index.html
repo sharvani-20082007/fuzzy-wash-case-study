@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fuzzy Wash: controller and fault doctor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css"></head>
+<body>
+<header><h1>Fuzzy Wash</h1><p>A washing machine that reasons in degrees, with a fault doctor standing guard.</p></header>
+<main>
+ <aside>
+  <section class="porthole" id="porthole">
+   <svg viewBox="0 0 240 240" aria-label="Washing drum">
+    <defs><clipPath id="clip"><circle cx="120" cy="120" r="84"/></clipPath></defs>
+    <circle cx="120" cy="120" r="112" class="ring"/><circle cx="120" cy="120" r="92" class="glass"/>
+    <g clip-path="url(#clip)"><rect id="water" x="30" y="120" width="180" height="120" class="water"/>
+     <g id="drum"><circle cx="120" cy="60" r="16" fill="#F2C14E"/><circle cx="76" cy="150" r="18" fill="#E8736B"/><circle cx="162" cy="146" r="14" fill="#FFFFFF"/><circle cx="130" cy="112" r="11" fill="#7FB5FF"/><circle cx="98" cy="100" r="9" fill="#3BB38F"/></g></g>
+   </svg>
+   <div class="verdict" id="verdict"></div>
+   <div class="big"><span id="oTime">0</span><small> min</small> <span id="oWater">0</span><small> % water</small></div>
+   <p id="note"></p>
+  </section>
+  <section class="ctrl">
+   <label>Dirtiness <output id="vD">60</output><input id="dirt" type="range" min="0" max="100" value="60"></label>
+   <label>Grease <output id="vG">70</output><input id="grease" type="range" min="0" max="100" value="70"></label>
+   <label>Load size <output id="vL">50</output><input id="load" type="range" min="0" max="100" value="50"></label>
+  </section>
+ </aside>
+ <section class="stage">
+  <nav id="tabs"><button class="on" data-t="live">Controller</button><button data-t="mf">Membership</button><button data-t="surf">Control surface</button><button data-t="cmp">Crisp vs fuzzy</button><button data-t="exp">Fault doctor</button></nav>
+  <div class="tab on" id="live">
+   <h2>Step 1. Fuzzification</h2><div id="fz" class="fz"></div>
+   <h2>Step 2. Rules that fired</h2><table id="rules"></table>
+   <h2>Step 3. Defuzzification</h2><canvas id="cAgg"></canvas><p id="cent" class="calc"></p>
+   <h2>Against the fixed 45-minute programme</h2><div id="save" class="save"></div>
+  </div>
+  <div class="tab" id="mf"><h2>Dirtiness, Grease and Load</h2><canvas id="cIn"></canvas><h2>Wash time</h2><canvas id="cTime"></canvas></div>
+  <div class="tab" id="surf"><h2>Wash time over Dirtiness and Grease</h2><p>Horizontal axis is Dirtiness, vertical axis is Grease. Lighter means a longer wash. Uses the Load slider.</p><canvas id="cSurf" class="sq"></canvas></div>
+  <div class="tab" id="cmp"><h2>Sweeping Dirtiness at the current Grease and Load</h2><p>The crisp controller jumps at the threshold. The fuzzy one glides.</p><canvas id="cCmp"></canvas></div>
+  <div class="tab" id="exp"><h2>What is wrong with the machine?</h2><div id="chips"></div><div id="diag"></div><h3>Why (forward-chaining trace)</h3><ol id="trace"></ol></div>
+ </section>
+</main>
+<script src="/app.js"></script></body></html>
